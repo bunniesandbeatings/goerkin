@@ -71,3 +71,44 @@ A Gherkin DSL for Ginkgo
         })
     })
 ```
+
+# Reusing steps
+```go
+    var _ = Describe("running a total", func() {
+        var (
+            total int
+            steps *Steps
+        )
+    
+        steps = Define(func(define Definitions) {
+            define.Given("The current total is cleared", func() {
+            	total = 0
+            })
+    
+            define.When("^I add 5$", func() {
+            	total = total + 5
+            })
+    
+            define.When("^I add 3$", func() {
+                total = total + 3
+            })
+
+            define.When("^I add 5 and 3 to the total$", func() {
+                steps.Run("I add 5")
+                steps.Run("I add 3")
+            })
+            
+            define.Then("^The total is 8$", func() {
+                Expect(total).To(Equal(8))
+            })
+        })
+    
+        Scenario("Adding", func() {
+            steps.Given("The current total is cleared")
+            
+            steps.When("I add 5 and 3 to the total")
+            
+            steps.Then("The total is 8")
+        })
+    })
+```
