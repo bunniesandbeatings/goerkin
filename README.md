@@ -19,6 +19,12 @@ A Gherkin DSL for Ginkgo
 
 # Sample
 ```go
+    import (
+        . "github.com/onsi/ginkgo"
+        . "github.com/onsi/gomega"
+        . "github.com/bunniesandbeatings/goerkin"
+    )
+
     var _ = Describe("running a total", func() {
         var (
             total int
