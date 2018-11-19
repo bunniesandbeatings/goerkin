@@ -1,6 +1,8 @@
 # goerkin
 A Gherkin DSL for Ginkgo
 
+Inspired by [Robbie Clutton's simple_bdd](https://github.com/robb1e/simple_bdd)
+
 # Goals
 
 * Provide the gherkin format for stories
