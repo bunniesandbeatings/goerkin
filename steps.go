@@ -9,13 +9,26 @@ type Steps struct {
 	definitions definitions
 }
 
-func Define(body func(definitions Definitions)) *Steps {
-	definitions := definitions{}
-	body(definitions)
+type defineBodyFn func(Definitions)
 
+func NewSteps() *Steps {
 	return &Steps{
-		definitions: definitions,
+		definitions: definitions{},
 	}
+}
+
+func Define(body ...interface{}) *Steps {
+	steps := NewSteps()
+
+	if len(body) > 0 {
+		steps.Define(body[0].(func(Definitions)))
+	}
+
+	return steps
+}
+
+func (s *Steps) Define(body defineBodyFn) {
+	body(s.definitions)
 }
 
 func (s *Steps) run(method, text string, override []bodyFn) {
