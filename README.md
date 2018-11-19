@@ -16,13 +16,6 @@ Inspired by [Robbie Clutton's simple_bdd](https://github.com/robb1e/simple_bdd)
 # TODO
 
 * Send Regex params to steps
-* support deffered actions in givens:
-  ```go
-  define.Given("I start a server",
-    func() { server.Start() },
-    func() { server.Stop() },
-  )
-  ```
 * Tests as living documentation 
 
 # Samples
@@ -182,4 +175,50 @@ I like my features at the top of the file. You can do that:
     
     })
 
+```
+
+
+## Cleanup Steps
+
+`Givens` and `Whens` support cleanup methods (they become ginkgo AfterEach blocks)
+
+```go
+    import (
+        . "github.com/onsi/ginkgo"
+        . "github.com/onsi/gomega"
+        . "github.com/bunniesandbeatings/goerkin"
+    )
+
+    var _ = Describe("Daemonize works", func() {
+        var (
+            app *exec.Cmd
+        )
+    
+        steps := NewSteps()
+
+        Scenario("Running", func() {
+            steps.Given("My server is running")
+            
+            steps.When("I visit it's url")
+            
+            steps.Then("It responds")
+        })
+
+        
+        
+        steps.Define(func(define Definitions) {
+            define.Given("My server is running",
+            	func() {
+            	    app := startMyServer()
+                },
+                func() {    // this becomes an AfterEach block.
+                	stopMyServer(app)
+                }
+            )
+    
+            ... blah, blah blah blablah ...
+        })
+        
+            
+    })
 ```
