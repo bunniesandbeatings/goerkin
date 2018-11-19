@@ -16,7 +16,13 @@ Inspired by [Robbie Clutton's simple_bdd](https://github.com/robb1e/simple_bdd)
 # TODO
 
 * Send Regex params to steps
-* Document using afterEach for deferred actions
+* support deffered actions in givens:
+  ```go
+  define.Given("I start a server",
+    func() { server.Start() },
+    func() { server.Stop() },
+  )
+  ```
 * Tests as living documentation 
 
 # Samples
