@@ -4,7 +4,7 @@ A Gherkin DSL for Ginkgo
 # Goals
 
 * Provide the gherkin format for stories
-    * without a special `*.feature` format which.
+    * without a special `*.feature` format
 * Local step definitions instead of shared steps which often force *the wrong abstraction*
     * of course you can still import shared definitions as methods
 * Lean on Ginkgo so as not to create a whole other system that needs extensive design and testing
@@ -72,7 +72,7 @@ A Gherkin DSL for Ginkgo
     })
 ```
 
-# Reusing steps
+# Calling steps from within other steps
 ```go
     var _ = Describe("running a total", func() {
         var (
