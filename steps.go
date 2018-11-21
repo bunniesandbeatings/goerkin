@@ -34,6 +34,7 @@ func (s *Steps) Define(body defineBodyFn) {
 func (s *Steps) run(method, text string, override []bodyFn) {
 	if len(override) > 0 {
 		ginkgo.By(text, override[0])
+		return
 	}
 
 	var match bodyFn
