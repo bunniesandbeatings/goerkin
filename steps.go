@@ -50,8 +50,10 @@ func (s *Steps) run(method, text string, override []bodyFn) {
 	}
 
 	if match == nil {
-		template := fmt.Sprintf("define.%s(\"^%s$\", func() {})", method, text)
-		ginkgo.Fail(fmt.Sprintf("No match for `%s`, try adding:\n%s", text, template))
+		templateBacktick := fmt.Sprintf("define.%s(`^%s$`, func() {})", method, text)
+		templateDouble := fmt.Sprintf("define.%s(\"^%s$\", func() {})", method, text)
+		// FIXME: matches fail here, they should show the definition that failed
+		ginkgo.Fail(fmt.Sprintf("No match for `%s`, try adding:\n%s\nor:\n%s\n", text, templateBacktick, templateDouble))
 		return
 	}
 
