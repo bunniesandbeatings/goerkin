@@ -3,15 +3,21 @@ A Gherkin DSL for Ginkgo
 
 Inspired by [Robbie Clutton's simple_bdd](https://github.com/robb1e/simple_bdd)
 
+* Use with [Ginkgo](https://github.com/onsi/ginkgo) and [Gomega](https://github.com/onsi/gomega)
+* I like using it with [Agouti](https://github.com/sclevine/agouti)
+
+
 # Goals
 
 * Provide the gherkin format for stories
     * without a special `*.feature` format
-* Local step definitions instead of shared steps which often force *the wrong abstraction*
+* Local step definitions instead of shared steps which often drives developers toward [the wrong abstraction](https://www.sandimetz.com/blog/2016/1/20/the-wrong-abstraction)
     * of course you can still import shared definitions as methods
 * Lean on Ginkgo so as not to create a whole other system that needs extensive design and testing
 * Promote imperative style tests
-    * Dissuade the use of BeforeEach/AfterEach    
+    * Dissuade the use of BeforeEach/AfterEach
+    * In Ruby/RSpec complexity of Before/After meant your SUT was complex
+    * In Golang, complexity of Before/After means you're writing go :P    
 
 # TODO
 
