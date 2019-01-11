@@ -76,7 +76,86 @@ var _ = Describe("Scenario first", func() {
 			Succeed()
 		})
 	})
+})
 
+var _ = Describe("After Definitions", func() {
+	var (
+		givenCalled      = false
+		whenCalled       = false
+		thenCalled       = false
+		givenAfterCalled = false
+		whenAfterCalled  = false
+		thenAfterCalled  = false
+	)
+	steps := NewSteps()
+
+	Scenario("After functions are called after all of the other functions", func() {
+		steps.Given("given calls are set to true", func() {
+			// This runs 1st
+			givenCalled = true
+			Expect(givenCalled).To(BeTrue())
+			Expect(whenCalled).To(BeFalse())
+			Expect(thenCalled).To(BeFalse())
+
+			Expect(givenAfterCalled).To(BeFalse())
+			Expect(whenAfterCalled).To(BeFalse())
+			Expect(thenAfterCalled).To(BeFalse())
+		}, func() {
+			// This runs 4th
+			givenAfterCalled = true
+			Expect(givenCalled).To(BeTrue())
+			Expect(whenCalled).To(BeTrue())
+			Expect(thenCalled).To(BeTrue())
+
+			Expect(givenAfterCalled).To(BeTrue())
+			Expect(whenAfterCalled).To(BeFalse())
+			Expect(thenAfterCalled).To(BeFalse())
+		})
+
+		steps.When("when calls are set to true", func() {
+			// This runs 2nd
+			whenCalled = true
+			Expect(givenCalled).To(BeTrue())
+			Expect(whenCalled).To(BeTrue())
+			Expect(thenCalled).To(BeFalse())
+
+			Expect(givenAfterCalled).To(BeFalse())
+			Expect(whenAfterCalled).To(BeFalse())
+			Expect(thenAfterCalled).To(BeFalse())
+		}, func() {
+			// This runs 5th
+			whenAfterCalled = true
+			Expect(givenCalled).To(BeTrue())
+			Expect(whenCalled).To(BeTrue())
+			Expect(thenCalled).To(BeTrue())
+
+			Expect(givenAfterCalled).To(BeTrue())
+			Expect(whenAfterCalled).To(BeTrue())
+			Expect(thenAfterCalled).To(BeFalse())
+		})
+
+		steps.Then("then calls are set to true", func() {
+			// This runs 3rd
+			thenCalled = true
+			Expect(givenCalled).To(BeTrue())
+			Expect(whenCalled).To(BeTrue())
+			Expect(thenCalled).To(BeTrue())
+
+			Expect(givenAfterCalled).To(BeFalse())
+			Expect(whenAfterCalled).To(BeFalse())
+			Expect(thenAfterCalled).To(BeFalse())
+		}, func() {
+			// This runs 6th
+			thenAfterCalled = true
+			Expect(givenCalled).To(BeTrue())
+			Expect(whenCalled).To(BeTrue())
+			Expect(thenCalled).To(BeTrue())
+
+			Expect(givenAfterCalled).To(BeTrue())
+			Expect(whenAfterCalled).To(BeTrue())
+			Expect(thenAfterCalled).To(BeTrue())
+		})
+	})
 })
 
 var _ = Describe("Groups as params", func() {
@@ -102,4 +181,3 @@ var _ = Describe("Groups as params", func() {
 	})
 
 })
-
