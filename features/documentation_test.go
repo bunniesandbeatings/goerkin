@@ -216,3 +216,21 @@ var _ = Describe("Shared Steps with the framework", func() {
 		},
 	)
 })
+
+var _ = Describe("Shared Steps with the framework", func() {
+	steps := NewSteps()
+
+	Scenario("Use a shared step", func() {
+		steps.Given("I am a shared step")
+		steps.Then("I can depend upon it")
+	})
+
+	steps.Define(
+		sharedSteps, // framework addition
+		func(define Definitions) {
+			define.Then(`^I can depend upon it$`, func() {
+				Expect(sharedValue).To(Equal("shared step called"))
+			})
+		},
+	)
+})

@@ -9,6 +9,7 @@ import (
 
 type Steps struct {
 	definitions definitions
+	Fail        func(message string, callerSkip ...int)
 }
 
 type defineBodyFn func(Definitions)
@@ -17,6 +18,7 @@ type bodyFn func()
 func NewSteps() *Steps {
 	return &Steps{
 		definitions: definitions{},
+		Fail:        ginkgo.Fail,
 	}
 }
 
@@ -47,6 +49,7 @@ func (s *Steps) run(method, text string, override []bodyFn) {
 		return
 	}
 
+	var matches []string
 	match := matchT{}
 
 	for re, body := range s.definitions {
@@ -55,20 +58,25 @@ func (s *Steps) run(method, text string, override []bodyFn) {
 			continue
 		}
 
-		if match.body != nil {
-			ginkgo.Fail(fmt.Sprintf("Too many matches for `%s`", text))
-			return
-		}
+		matches = append(matches, re.String())
 
 		match.body = body
 		match.params = stringMatches[1:]
+	}
+
+	if len(matches) > 1 {
+		faultMessage := fmt.Sprintf("Too many matches for `%s`:\n", text)
+		for i, expression := range matches {
+			faultMessage = fmt.Sprintf("%s\t%d: %s\n", faultMessage, i, expression)
+		}
+		s.Fail(faultMessage)
 	}
 
 	if match.body == nil {
 		templateBacktick := fmt.Sprintf("define.%s(`^%s$`, func() {})", method, text)
 		templateDouble := fmt.Sprintf("define.%s(\"^%s$\", func() {})", method, text)
 		// FIXME: matches fail here, they should show the definition that failed
-		ginkgo.Fail(fmt.Sprintf("No match for `%s`, try adding:\n%s\nor:\n%s\n", text, templateBacktick, templateDouble))
+		s.Fail(fmt.Sprintf("No match for `%s`, try adding:\n%s\nor:\n%s\n", text, templateBacktick, templateDouble))
 		return
 	}
 
