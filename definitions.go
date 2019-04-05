@@ -2,8 +2,9 @@ package goerkin
 
 import (
 	"fmt"
-	"github.com/onsi/ginkgo"
 	"regexp"
+
+	"github.com/onsi/ginkgo"
 )
 
 type Definitions interface {
@@ -27,6 +28,8 @@ func (defs definitions) add(text string, body interface{}, after []func()) {
 	defs[re] = body
 }
 
-func (defs definitions) Given(re string, given interface{}, after ...func()) { defs.add(re, given, after) }
-func (defs definitions) When(re string, when interface{}, after ...func())   { defs.add(re, when, after) }
-func (defs definitions) Then(re string, then interface{}, after ...func())   { defs.add(re, then, after) }
+func (defs definitions) Given(re string, given interface{}, after ...func()) {
+	defs.add(re, given, after)
+}
+func (defs definitions) When(re string, when interface{}, after ...func()) { defs.add(re, when, after) }
+func (defs definitions) Then(re string, then interface{}, after ...func()) { defs.add(re, then, after) }

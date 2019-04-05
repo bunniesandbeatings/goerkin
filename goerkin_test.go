@@ -1,10 +1,11 @@
 package goerkin_test
 
 import (
+	"strconv"
+
 	. "github.com/bunniesandbeatings/goerkin"
 	. "github.com/onsi/ginkgo"
 	. "github.com/onsi/gomega"
-	"strconv"
 )
 
 var _ = Describe("Inline Definitions", func() {

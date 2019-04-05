@@ -2,8 +2,9 @@ package goerkin
 
 import (
 	"fmt"
-	"github.com/onsi/ginkgo"
 	"reflect"
+
+	"github.com/onsi/ginkgo"
 )
 
 type Steps struct {
@@ -33,7 +34,7 @@ func (s *Steps) Define(body defineBodyFn) {
 }
 
 type matchT struct {
-	body interface{}
+	body   interface{}
 	params []string
 }
 
@@ -47,7 +48,9 @@ func (s *Steps) run(method, text string, override []bodyFn) {
 
 	for re, body := range s.definitions {
 		stringMatches := re.FindStringSubmatch(text)
-		if stringMatches == nil { continue }
+		if stringMatches == nil {
+			continue
+		}
 
 		if match.body != nil {
 			ginkgo.Fail(fmt.Sprintf("Too many matches for `%s`", text))
