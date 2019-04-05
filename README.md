@@ -14,7 +14,7 @@ Goerkin is great for feature tests. Let us know if you use it, and what for! We'
 * Provide the gherkin format for stories
     * without a special `*.feature` format
 * Local step definitions instead of shared steps which often drives developers toward [the wrong abstraction](https://www.sandimetz.com/blog/2016/1/20/the-wrong-abstraction)
-    * of course you can still [share steps](#Shared%20Steps)
+    * of course you can still [share steps](#shared-steps)
 * Lean on Ginkgo so as not to create a whole other BDD system that needs extensive design and testing
 * Promote imperative style tests
     * Dissuade the use of BeforeEach/AfterEach
