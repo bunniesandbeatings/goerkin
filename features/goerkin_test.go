@@ -1,4 +1,4 @@
-package goerkin_test
+package features_test
 
 import (
 	"strconv"
@@ -159,7 +159,7 @@ var _ = Describe("After Definitions", func() {
 	})
 })
 
-var _ = Describe("Groups as params", func() {
+var _ = Describe("Groups as string params", func() {
 	var total int
 	steps := NewSteps()
 
@@ -169,7 +169,6 @@ var _ = Describe("Groups as params", func() {
 	})
 
 	steps.Define(func(define Definitions) {
-		// TODO, reflect and report so the func can expect ints
 		define.Given(`^(\d+) and (\d+)$`, func(first, second string) {
 			firstInt, _ := strconv.Atoi(first)
 			secondInt, _ := strconv.Atoi(second)
@@ -181,4 +180,39 @@ var _ = Describe("Groups as params", func() {
 		})
 	})
 
+})
+
+var _ = Describe("Shared Steps without the framework", func() {
+	steps := NewSteps()
+
+	Scenario("Use a shared step", func() {
+		steps.Given("I am a shared step")
+		steps.Then("I can depend upon it")
+	})
+
+	steps.Define(func(define Definitions) {
+		sharedSteps(define) // inline addition
+
+		define.Then(`^I can depend upon it$`, func() {
+			Expect(sharedValue).To(Equal("shared step called"))
+		})
+	})
+})
+
+var _ = Describe("Shared Steps with the framework", func() {
+	steps := NewSteps()
+
+	Scenario("Use a shared step", func() {
+		steps.Given("I am a shared step")
+		steps.Then("I can depend upon it")
+	})
+
+	steps.Define(
+		sharedSteps, // framework addition
+		func(define Definitions) {
+			define.Then(`^I can depend upon it$`, func() {
+				Expect(sharedValue).To(Equal("shared step called"))
+			})
+		},
+	)
 })

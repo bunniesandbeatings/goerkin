@@ -1,4 +1,4 @@
-package goerkin_test
+package features_test
 
 import (
 	"testing"

@@ -12,6 +12,7 @@ type Steps struct {
 }
 
 type defineBodyFn func(Definitions)
+type bodyFn func()
 
 func NewSteps() *Steps {
 	return &Steps{
@@ -29,8 +30,10 @@ func Define(body ...interface{}) *Steps {
 	return steps
 }
 
-func (s *Steps) Define(body defineBodyFn) {
-	body(s.definitions)
+func (s *Steps) Define(bodies ...defineBodyFn) {
+	for _, body := range bodies {
+		body(s.definitions)
+	}
 }
 
 type matchT struct {

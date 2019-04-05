@@ -3,28 +3,25 @@ A Gherkin DSL for Ginkgo
 
 Inspired by [Robbie Clutton's simple_bdd](https://github.com/robb1e/simple_bdd)
 
-* Use with [Ginkgo](https://github.com/onsi/ginkgo) and [Gomega](https://github.com/onsi/gomega)
-* I like using it with [Agouti](https://github.com/sclevine/agouti)
+Goerkin is great for feature tests. Let us know if you use it, and what for! We'd love to hear feedback.
 
+* Designed as an extension to [Ginkgo](https://github.com/onsi/ginkgo). 
+* We recommend [Gomega](https://github.com/onsi/gomega) matchers.
+* For testing web apps, try combining Goerkin with [Agouti](https://github.com/sclevine/agouti).
+* Use it even if your app isn't written in Go. It's a nice expressive way to build tests for JS, Node and other kinds of apps.  
 
 # Goals
-
 * Provide the gherkin format for stories
     * without a special `*.feature` format
 * Local step definitions instead of shared steps which often drives developers toward [the wrong abstraction](https://www.sandimetz.com/blog/2016/1/20/the-wrong-abstraction)
-    * of course you can still import shared definitions as methods
-* Lean on Ginkgo so as not to create a whole other system that needs extensive design and testing
+    * of course you can still [share steps](#Shared%20Steps)
+* Lean on Ginkgo so as not to create a whole other BDD system that needs extensive design and testing
 * Promote imperative style tests
     * Dissuade the use of BeforeEach/AfterEach
-    * In Ruby/RSpec complexity of Before/After meant your SUT was complex
-    * In Golang, complexity of Before/After means you're writing go :P    
-
-# TODO
-
-* Send Regex params to steps
-* Tests as living documentation 
 
 # Samples
+
+You can find most of these use cases as [actual tests in the features folder](./features/goerkin_test.go)
 
 ## Simple usage
 ```go
@@ -122,15 +119,9 @@ Inspired by [Robbie Clutton's simple_bdd](https://github.com/robb1e/simple_bdd)
     })
 ```
 ## Features first
-
 I like my features at the top of the file. You can do that:
-```go
-    import (
-        . "github.com/onsi/ginkgo"
-        . "github.com/onsi/gomega"
-        . "github.com/bunniesandbeatings/goerkin"
-    )
 
+```go
     var _ = Describe("running a total", func() {
         var (
             total int
@@ -180,21 +171,13 @@ I like my features at the top of the file. You can do that:
         })
     
     })
-
 ```
-
 
 ## Cleanup Steps
 
-`Givens` and `Whens` support cleanup methods (they become ginkgo AfterEach blocks)
+`Givens` and `Whens` support cleanup methods
 
 ```go
-    import (
-        . "github.com/onsi/ginkgo"
-        . "github.com/onsi/gomega"
-        . "github.com/bunniesandbeatings/goerkin"
-    )
-
     var _ = Describe("Daemonize works", func() {
         var (
             app *exec.Cmd
@@ -217,7 +200,8 @@ I like my features at the top of the file. You can do that:
             	func() {
             	    app := startMyServer()
                 },
-                func() {    // this becomes an AfterEach block.
+                func() {
+                	// this is a cleanup step
                 	stopMyServer(app)
                 }
             )
@@ -227,4 +211,52 @@ I like my features at the top of the file. You can do that:
         
             
     })
+```
+
+## Shared Steps
+
+You can define shared steps and re-use them. Within the same
+package, package level var's are great for sharing state. Because
+we tend to put all our feature tests in one `features` package
+this has not been an issue. Let us know if you need to share 
+step definitions across packages, and if you have a solution 
+you can share.
+
+
+```go
+// your_test.go:
+package features_test
+
+var _ = Describe("Shared Steps with the framework", func() {
+	steps := NewSteps()
+
+	Scenario("Use a shared step", func() {
+		steps.Given("I am a shared step")
+		steps.Then("I can depend upon it")
+	})
+
+	steps.Define(
+		sharedSteps, // framework addition
+		func(define Definitions) {
+			define.Then(`^I can depend upon it$`, func() {
+				Expect(sharedValue).To(Equal("shared step called"))
+			})
+		},
+	)
+})
+```
+
+```go
+// shared_steps_test.go:
+package features_test
+
+var sharedValue string
+
+var sharedSteps = func(define Definitions) {
+	define.Given(`^I am a shared step$`, func() {
+		sharedValue = "shared step called"
+	}, func() {
+		sharedValue = "" // remember to clean up broadly scoped variables
+	})
+}
 ```
