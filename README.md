@@ -21,7 +21,7 @@ Goerkin is great for feature tests. Let us know if you use it, and what for! We'
 
 # Samples
 
-You can find most of these use cases as [actual tests in the documentation test](./features/documentation_test.go)
+You can find most of these use cases as [actual tests in the documentation test](https://github.com/bunniesandbeatings/goerkin/blob/master/features/documentation_test.go)
 
 ## Simple usage
 ```go
