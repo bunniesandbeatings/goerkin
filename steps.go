@@ -2,24 +2,50 @@ package goerkin
 
 import (
 	"fmt"
+	"os"
 	"reflect"
+	"regexp"
 
 	"github.com/onsi/ginkgo"
+	. "github.com/onsi/gomega"
 )
 
 type Steps struct {
 	definitions definitions
-	Fail        func(message string, callerSkip ...int)
+	used        definitions
+
+	Fail func(message string, callerSkip ...int)
+}
+
+func (s *Steps) UnusedSteps() []string {
+	var unused []string
+
+	for stepRE := range s.definitions {
+		if _, used := s.used[stepRE]; !used {
+			unused = append(unused, stepRE.String())
+		}
+	}
+
+	return unused
 }
 
 type defineBodyFn func(Definitions)
 type bodyFn func()
 
 func NewSteps() *Steps {
-	return &Steps{
+	steps := &Steps{
 		definitions: definitions{},
+		used:        definitions{},
 		Fail:        ginkgo.Fail,
 	}
+
+	if _, set := os.LookupEnv("UNUSED_FAIL"); set {
+		ginkgo.AfterEach(func() {
+			Expect(steps.UnusedSteps()).To(BeEmpty(), "This array represents unused step definitions")
+		})
+	}
+
+	return steps
 }
 
 func Define(body ...interface{}) *Steps {
@@ -41,6 +67,7 @@ func (s *Steps) Define(bodies ...defineBodyFn) {
 type matchT struct {
 	body   interface{}
 	params []string
+	re     *regexp.Regexp
 }
 
 func (s *Steps) run(method, text string, override []bodyFn) {
@@ -62,6 +89,7 @@ func (s *Steps) run(method, text string, override []bodyFn) {
 
 		match.body = body
 		match.params = stringMatches[1:]
+		match.re = re
 	}
 
 	if len(matches) > 1 {
@@ -70,6 +98,7 @@ func (s *Steps) run(method, text string, override []bodyFn) {
 			faultMessage = fmt.Sprintf("%s\t%d: %s\n", faultMessage, i, expression)
 		}
 		s.Fail(faultMessage)
+		return // not necessary but makes it clear that this does not continue
 	}
 
 	if match.body == nil {
@@ -77,8 +106,10 @@ func (s *Steps) run(method, text string, override []bodyFn) {
 		templateDouble := fmt.Sprintf("define.%s(\"^%s$\", func() {})", method, text)
 		// FIXME: matches fail here, they should show the definition that failed
 		s.Fail(fmt.Sprintf("No match for `%s`, try adding:\n%s\nor:\n%s\n", text, templateBacktick, templateDouble))
-		return
+		return // not necessary but makes it clear that this does not continue
 	}
+
+	s.used[match.re] = true
 
 	ginkgo.By(text, func() {
 		switch match.body.(type) {

@@ -260,3 +260,14 @@ var sharedSteps = func(define Definitions) {
 	})
 }
 ```
+
+## Unused steps
+
+If you want to find all your unused steps, run the entire suite with env var `UNUSED_FAIL` set:
+
+```bash
+    UNUSED_FAIL=true && ginkgo -r .
+```
+
+For _shared steps_ this will fail fast (first Describe block that doesn't use all of the shared steps),
+so **tread carefully** with shared steps. Make sure you run all your tests again with UNUSED_FAIL unset.

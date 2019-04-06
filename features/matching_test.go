@@ -13,7 +13,6 @@ var _ = Describe("Over/Under-match experience", func() {
 		steps.Given("Two givens with similar regexes")
 		steps.When("a given that matches both definitions is called")
 		steps.Then("I see the given's causing me trouble")
-
 	})
 
 	steps.Define(func(define Definitions) {
