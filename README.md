@@ -1,12 +1,6 @@
 * Travis Tests [![Build Status](https://travis-ci.com/bunniesandbeatings/goerkin.svg?branch=master)](https://travis-ci.com/bunniesandbeatings/goerkin)
 * Covenant: [![Contributor Covenant](https://img.shields.io/badge/Contributor%20Covenant-v1.4%20adopted-ff69b4.svg)](code-of-conduct.md)
 
-**Please note** that this project is released with a Contributor Code of Conduct. 
-By participating in this project you agree to abide by its terms.
-
-Enforcement will be swift _when I see a github issue raised_ or _an email_, but if you don't get a response, please 
-send me a message: "@squeedee, you have bunnies and beatings email waiting" on Twitter. 
-
 # Goerkin
 A Gherkin DSL for Ginkgo
 
@@ -282,3 +276,8 @@ If you want to find all your unused steps, run the entire suite with env var `UN
 
 For _shared steps_ this will fail fast (first Describe block that doesn't use all of the shared steps),
 so **tread carefully** with shared steps. Make sure you run all your tests again with UNUSED_FAIL unset.
+
+# Guidelines
+
+**Please note** that this project is released with a Contributor Code of Conduct. 
+By participating in this project you agree to abide by its terms.
