@@ -107,7 +107,7 @@ func (s *Steps) run(method, text string, override []bodyFn) {
 
 		// Skip 2 skips this line and the alias below, resulting in the code location being where the step was called
 		// in the user's feature file
-		s.Fail(fmt.Sprintf("No match for `%s`, try adding:\n%s\nor:\n%s\n", text, templateBacktick, templateDouble),2)
+		s.Fail(fmt.Sprintf("No match for `%s`, try adding:\n%s\nor:\n%s\n", text, templateBacktick, templateDouble), 2)
 		return // not necessary but makes it clear that this does not continue
 	}
 

@@ -1,5 +1,15 @@
-# goerkin
+**Please note** that this project is released with a Contributor Code of Conduct. 
+By participating in this project you agree to abide by its terms.
+
+[![Contributor Covenant](https://img.shields.io/badge/Contributor%20Covenant-v1.4%20adopted-ff69b4.svg)](code-of-conduct.md)
+
+Enforcement will be swift _when I see a github issue raised_ or _an email_, but if you don't get a response, please 
+send me a message: "@squeedee, you have bunnies and beatings email waiting" on Twitter. 
+
+# Goerkin
 A Gherkin DSL for Ginkgo
+
+Pronounced just like Gherkin OR Go-erk-in. Your choice.
 
 Inspired by [Robbie Clutton's simple_bdd](https://github.com/robb1e/simple_bdd)
 
