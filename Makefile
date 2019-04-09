@@ -29,7 +29,8 @@ deps: deps-goimports deps-go-binary
 	go mod download
 
 test: deps lint
-	ginkgo -r .
+	ginkgo -r --randomizeAllSpecs --randomizeSuites --race --trace .
 
 lint: deps-goimports
+	go vet
 	git ls-files | grep '.go$$' | xargs goimports -l -w
