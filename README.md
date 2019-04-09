@@ -1,3 +1,6 @@
+* Travis Tests [![Build Status](https://travis-ci.com/bunniesandbeatings/goerkin.svg?branch=master)](https://travis-ci.com/bunniesandbeatings/goerkin)
+* Covenant: [![Contributor Covenant](https://img.shields.io/badge/Contributor%20Covenant-v1.4%20adopted-ff69b4.svg)](code-of-conduct.md)
+
 **Please note** that this project is released with a Contributor Code of Conduct. 
 By participating in this project you agree to abide by its terms.
 
